@@ -8,6 +8,6 @@ public class RacketController : MonoBehaviour
 
         MosquitoDeath md = other.GetComponent<MosquitoDeath>();
         if (md != null)
-            md.Die();
+            md.Die(true);
     }
 }

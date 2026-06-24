@@ -17,6 +17,7 @@ public class MosquitoDeath : MonoBehaviour
     private MosquitoMove moveScript;
     private ObjectPool pool;
     private bool isDead = false;
+    private bool diedFromLifetime = false;
     private Sprite originalSprite;
     private float lifeTimer;
 
@@ -40,6 +41,7 @@ public class MosquitoDeath : MonoBehaviour
     void ResetState()
     {
         isDead = false;
+        diedFromLifetime = false;
         lifeTimer = lifetime;
         rb.isKinematic = true;
         rb.gravityScale = 0f;
@@ -80,14 +82,14 @@ public class MosquitoDeath : MonoBehaviour
         Destroy(marker);
     }
 
-    public void Die()
+    public void Die(bool isRacketKill = false)
     {
         if (isDead) return;
         isDead = true;
 
         StartCoroutine(ShowHitMarker());
 
-        if (GameManager.Instance != null)
+        if (GameManager.Instance != null && !isRacketKill && !diedFromLifetime)
             GameManager.Instance.AddKill();
 
         if (moveScript != null)
@@ -104,6 +106,7 @@ public class MosquitoDeath : MonoBehaviour
     void FadeAway()
     {
         isDead = true;
+        diedFromLifetime = true;
 
         if (moveScript != null)
             moveScript.enabled = false;
