@@ -6,6 +6,7 @@ public class MosquitoDeath : MonoBehaviour
 {
     public Sprite deadSprite;
     public Sprite hitMarker;
+    public AudioClip hitMarkerSound;
     public float hitMarkerDuration = 0.2f;
     public float lifetime = 10f;
     public float fadeDelay = 5f;
@@ -60,7 +61,7 @@ public class MosquitoDeath : MonoBehaviour
     void OnMouseDown()
     {
         if (isDead) return;
-        StartCoroutine(ShowHitMarker());
+        if (GameManager.Instance != null && GameManager.Instance.IsRacketActive()) return;
         Die();
     }
 
@@ -72,26 +73,31 @@ public class MosquitoDeath : MonoBehaviour
         markerSr.sprite = hitMarker;
         markerSr.sortingOrder = 10;
 
+        if (hitMarkerSound != null)
+            AudioSource.PlayClipAtPoint(hitMarkerSound, transform.position);
+
         yield return new WaitForSeconds(hitMarkerDuration);
         Destroy(marker);
     }
 
-    void Die()
+    public void Die()
     {
+        if (isDead) return;
         isDead = true;
 
-        // Stop movement
+        StartCoroutine(ShowHitMarker());
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.AddKill();
+
         if (moveScript != null)
             moveScript.enabled = false;
 
-        // Enable rigidbody to fall
         rb.isKinematic = false;
         rb.gravityScale = 3f;
 
-        // Change sprite
         sr.sprite = deadSprite;
 
-        // Start fade and destroy
         StartCoroutine(FadeAndDestroy());
     }
 

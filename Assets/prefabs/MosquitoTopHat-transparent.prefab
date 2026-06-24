@@ -119,6 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deadSprite: {fileID: 21300000, guid: f2f8f763a14fe6c4eafc4dbfc3b63921, type: 3}
   hitMarker: {fileID: 21300000, guid: 2c8bdcd3314706f48ae833ed8bf2d3be, type: 3}
+  hitMarkerSound: {fileID: 8300000, guid: 427feb9ddf3320947b4b245644e0b5b8, type: 3}
   hitMarkerDuration: 0.2
   lifetime: 10
   fadeDelay: 5
